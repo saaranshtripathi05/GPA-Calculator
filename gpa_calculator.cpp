@@ -3,12 +3,59 @@
 #include<string>
 #include<iomanip>
 #include<unordered_map>
+
+void calculateSGPA();
+void calculateCGPA();
+
 int main(){
+    int input;
+    std::cout<<"Enter a Choice:\n";
+    std::cout<<"1.CALCULATE SGPA\n";
+    std::cout<<"2.CALCULATE CGPA\n";
+
+    std::cout<<"Your Choice: ";
+    std::cin>>input;
+
+    switch(input){
+        case 1:
+            calculateSGPA();
+            break;
+
+         case 2:
+            calculateCGPA();
+            break;
+        default:
+             std::cout<<"Enter a valid option number\n";
+             main();
+
+    }
+
+    int input2;
+    std::cout<<"Do you want to exit: \n";
+    std::cout<<"1.Yes \n";
+    std::cout<<"2.No \n";
+
+    std::cin>>input2;
+
+    switch(input2){
+        case 1:
+            exit(EXIT_SUCCESS);
+            break;
+        case 2:
+            main();
+            break;
+        default:
+            std::cout<<"Enter a valid choice\n";
+            break;
+    }
+
+}
+void calculateSGPA(){
     float gpa = 0.0;
     int subjects;
     std::cout<<"Enter number of subjects: \n";
     std::cin>>subjects;
-    if(subjects <= 0) return 1;
+    if(subjects <= 0) return;
 
     std::vector<int>credit(subjects);
     std::vector<std::string>Grade(subjects);
@@ -42,4 +89,27 @@ int main(){
     gpa = gpa/credits;
 
     std::cout<<"GPA = "<<std::fixed << std::setprecision(2)<<gpa;
+}
+
+void calculateCGPA(){
+    int sem;
+    std::cout<<"Enter number of semesters:\n";
+    std::cin>>sem;
+    std::vector<float>sgpa(sem);
+
+    std::cout<<"Enter SGPA of each semester: \n";
+    
+    for(int i=0;i<sem;i++){
+        std::cin>>sgpa[i];
+    }
+
+    float cgpa=0;
+
+    for(int i=0;i<sem;i++){
+        cgpa+=sgpa[i];
+    }
+
+    cgpa = cgpa/sem;
+
+    std::cout<<"CGPA is: "<<std::fixed<<std::setprecision(2)<<cgpa<<"\n";
 }
