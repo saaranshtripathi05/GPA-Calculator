@@ -16,6 +16,7 @@ int main(){
     std::cout<<"Enter a Choice:\n";
     std::cout<<"1.CALCULATE SGPA\n";
     std::cout<<"2.CALCULATE CGPA\n";
+    std::cout<<"3.Exit\n";
 
     std::cout<<"Your Choice: ";
     std::cin>>input;
@@ -28,30 +29,12 @@ int main(){
          case 2:
             calculateCGPA();
             break;
+        case 3:
+             exit(EXIT_SUCCESS);
         default:
              std::cout<<"Enter a valid option number\n";
             }
     }
-
-    int input2;
-    std::cout<<"Do you want to exit: \n";
-    std::cout<<"1.Yes \n";
-    std::cout<<"2.No \n";
-
-    std::cin>>input2;
-
-    switch(input2){
-        case 1:
-            exit(EXIT_SUCCESS);
-            break;
-        case 2:
-            main();
-            break;
-        default:
-            std::cout<<"Enter a valid choice\n";
-            break;
-    }
-
 }
 
 std::unordered_map<std::string,int> Gradep={
@@ -80,11 +63,16 @@ void calculateSGPA(){
     for(int i=0;i<subjects;i++){
         std::cin>>Grade[i];
     }
+    for(int i = 0; i < subjects; i++) {
 
+    std::transform(Grade[i].begin(),
+                   Grade[i].end(),
+                   Grade[i].begin(),
+                   ::toupper);
 
-    for(int i=0;i<subjects;i++){
-        gpa = gpa + (Gradep[Grade[i]]*credit[i]);
-    }
+    gpa += Gradep[Grade[i]] * credit[i];
+}
+
 
     int credits=0;
     for(int i=0;i<subjects;i++){
