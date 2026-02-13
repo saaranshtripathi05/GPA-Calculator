@@ -81,6 +81,7 @@ void calculateSGPA(){
         std::cin>>Grade[i];
     }
 
+    std::transform(Grade.begin(), Grade.end(), Grade.begin(), ::toupper);
 
     for(int i=0;i<subjects;i++){
         gpa = gpa + (Gradep[Grade[i]]*credit[i]);
