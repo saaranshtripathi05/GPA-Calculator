@@ -30,59 +30,68 @@ int main(){
             calculateCGPA();
             break;
         case 3:
-             exit(EXIT_SUCCESS);
+             return 0;
         default:
              std::cout<<"Enter a valid option number\n";
             }
     }
 }
 
-std::unordered_map<std::string,int> Gradep={
+const std::unordered_map<std::string,int> Gradep={
         {"O",10},{"A+",9},{"A",8},
         {"B+",7},{"B",6},{"C",5},{"F",0}
     };
 
-void calculateSGPA(){
-    float gpa = 0.0;
+void calculateSGPA() {
+
+    double gpa = 0.0;
     int subjects;
-    std::cout<<"Enter number of subjects: \n";
-    std::cin>>subjects;
-    if(subjects <= 0) return;
 
-    std::vector<int>credit(subjects);
-    std::vector<std::string>Grade(subjects);
+    std::cout << "Enter number of subjects:\n";
+    std::cin >> subjects;
 
-    std::cout<<"Enter credits of each subjects\n";
+    if (subjects <= 0) return;
 
-    for(int i=0;i<subjects;i++){
-        std::cin>>credit[i];
+    std::vector<int> credit(subjects);
+    std::vector<std::string> Grade(subjects);
+
+    std::cout << "Enter credits of each subject\n";
+    for (int i = 0; i < subjects; i++) {
+        std::cin >> credit[i];
     }
 
-    std::cout<<"Enter Grades of each subjects\n";
-
-    for(int i=0;i<subjects;i++){
-        std::cin>>Grade[i];
+    std::cout << "Enter grades of each subject\n";
+    for (int i = 0; i < subjects; i++) {
+        std::cin >> Grade[i];
     }
-    for(int i = 0; i < subjects; i++) {
 
-    std::transform(Grade[i].begin(),
-                   Grade[i].end(),
-                   Grade[i].begin(),
-                   ::toupper);
+    int totalCredits = 0;
 
-    gpa += Gradep[Grade[i]] * credit[i];
+    for (int i = 0; i < subjects; i++) {
+
+        std::transform(Grade[i].begin(),
+                       Grade[i].end(),
+                       Grade[i].begin(),
+                       ::toupper);
+
+        if (Gradep.find(Grade[i]) == Gradep.end()) {
+            std::cout << "Invalid grade entered\n";
+            return;
+        }
+
+        gpa += Gradep.at(Grade[i]) * credit[i];
+        totalCredits += credit[i];
+    }
+
+    gpa /= totalCredits;
+
+    std::cout << "GPA = "
+              << std::fixed
+              << std::setprecision(2)
+              << gpa
+              << std::endl;
 }
 
-
-    int credits=0;
-    for(int i=0;i<subjects;i++){
-        credits += credit[i];
-    }
-
-    gpa = gpa/credits;
-
-    std::cout<<"GPA = "<<std::fixed << std::setprecision(2)<<gpa<<std::endl;
-}
 
 void calculateCGPA(){
     int sem;
