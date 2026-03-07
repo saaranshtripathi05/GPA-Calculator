@@ -89,7 +89,7 @@ std::cout << "+----------+----------+------------+\n";
 }
 
 void calculateCGPA() {
-    std::cout << "\n--- CGPA Calculator (weighted) ---\n";
+    std::cout << "\n--- CGPA Calculator (weighted by credits) ---\n";
 
     int semesters = getPositiveInt("Enter number of semesters: ");
 
@@ -101,8 +101,20 @@ void calculateCGPA() {
 
     for (int i = 0; i < semesters; ++i) {
         std::cout << "\nSemester " << (i + 1) << ":\n";
-        sgpas[i] = 0; 
-        sgpas[i] = getValidGradePoint("  SGPA of semester " + std::to_string(i + 1) + ": "); 
+
+        double sgpa_input;
+        while (true) {
+            std::cout << "  SGPA of semester " << (i + 1) << ": ";
+            if (std::cin >> sgpa_input && sgpa_input >= 0.0 && sgpa_input <= 10.0) {
+                sgpas[i] = sgpa_input;
+                break;
+            }
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Please enter a valid SGPA (0.0 to 10.0).\n";
+        }
+        // ─────────────────────────────────────────────────────────────────
+
         sem_credits[i] = getPositiveInt("  Total credits in semester " + std::to_string(i + 1) + ": ");
 
         total_points += sgpas[i] * sem_credits[i];
@@ -115,36 +127,57 @@ void calculateCGPA() {
     }
 
     double cgpa = total_points / total_credits;
+
+    std::cout << "\nSummary:\n";
+    std::cout << "+-----------+----------+--------+\n";
+    std::cout << "| Semester  | Credits  | SGPA   |\n";
+    std::cout << "+-----------+----------+--------+\n";
+
+    for (int i = 0; i < semesters; ++i) {
+        std::cout << "| " << std::left << std::setw(9) << (i + 1)
+                  << " | " << std::right << std::setw(8) << sem_credits[i]
+                  << " | " << std::right << std::setw(6) << std::fixed << std::setprecision(2) << sgpas[i] << " |\n";
+    }
+
+    std::cout << "+-----------+----------+--------+\n";
+
     std::cout << "\nYour CGPA = " << std::fixed << std::setprecision(2) << cgpa << "\n\n";
 }
 
 int main() {
     while (true) {
-        std::cout << "\n=== GPA Calculator ===\n";
-        std::cout << "1. Calculate SGPA\n";
-        std::cout << "2. Calculate CGPA (weighted)\n";
-        std::cout << "3. Exit\n";
-        std::cout << "Choice: ";
+        std::cout << "\n=== GPA Calculator ===\n"
+                  << "1. Calculate SGPA\n"
+                  << "2. Calculate CGPA (weighted)\n"
+                  << "3. Exit\n"
+                  << "Choice: ";
 
         int choice;
-        std::cin >> choice;
-
-        if (std::cin.fail()) {
+        if (!(std::cin >> choice)) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Invalid input. Try again.\n";
+            std::cout << "Invalid input. Please enter a number.\n";
             continue;
         }
 
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
         switch (choice) {
-            case 1: calculateSGPA(); break;
-            case 2: calculateCGPA(); break;
-            case 3: std::cout << "Goodbye!\n"; return 0;
-            default: std::cout << "Invalid choice. Please select 1–3.\n";
+            case 1:
+                calculateSGPA();
+                break;
+            case 2:
+                calculateCGPA();
+                break;
+            case 3:
+                std::cout << "Goodbye!\n";
+                return 0;
+            default:
+                std::cout << "Invalid choice. Please select 1–3.\n";
+                continue;
         }
 
-        std::cout << "Press Enter to continue...\n";
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cin.get();
+        std::cout << "\nPress Enter to return to menu...\n";
+        std::cin.get();  
     }
 }
